@@ -1,0 +1,46 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          coverage: none
+          tools: composer
+          extensions: mbstring
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Validate composer.json
+        run: composer validate --strict
+
+      - name: Lint (php-cs-fixer dry run)
+        run: composer format
+
+      - name: Static analysis
+        run: composer analyse
+
+      - name: Tests
+        run: composer test
+
+      - name: Trigger Packagist update
+        env:
+          TOKEN: ${{ secrets.PACKAGIST_TOKEN }}
+        run: |-
+          curl -X POST \
+            -H "Content-Type: application/json" \
+            -H "Accept: application/json" \
+            -d "{\"repository\": {\"url\": \"${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}\"}}" \
+            "https://packagist.org/api/update-package?username=${GITHUB_REPOSITORY_OWNER}&apiToken=${TOKEN}"
