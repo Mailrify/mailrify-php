@@ -11,3 +11,4 @@ coverage/
 node_modules/
 openapi.yaml
 RELEASE_HOWTO.md
+.phpunit.result.cache
