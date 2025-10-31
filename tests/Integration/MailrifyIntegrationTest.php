@@ -46,7 +46,7 @@ final class MailrifyIntegrationTest extends TestCase
             $this->markTestSkipped('MAILRIFY_INTEGRATION_FROM and MAILRIFY_INTEGRATION_TO must be set to run email integration tests.');
         }
 
-        $from = trim($fromEnv);
+        $from = $this->normalizeFromAddress($fromEnv);
         $recipients = array_values(array_filter(array_map('trim', explode(',', $toEnv)), static fn (string $value): bool => $value !== ''));
         if ($recipients === []) {
             $this->fail('MAILRIFY_INTEGRATION_TO must contain at least one valid email address.');
@@ -74,5 +74,27 @@ final class MailrifyIntegrationTest extends TestCase
 
         $listResponse = $this->client->emails()->listAll(['limit' => 10]);
         self::assertGreaterThanOrEqual(0, $listResponse->count);
+    }
+
+    private function normalizeFromAddress(string $raw): string
+    {
+        $candidate = trim($raw);
+
+        if ($candidate === '') {
+            return $candidate;
+        }
+
+        if (preg_match('/^(?:"?([^"<]*)"?\s*)?<([^>]+)>$/', $candidate, $matches) === 1) {
+            $name = trim($matches[1] ?? '');
+            $email = trim($matches[2] ?? '');
+
+            if ($name === '') {
+                return $email;
+            }
+
+            return sprintf('"%s" <%s>', $name, $email);
+        }
+
+        return $candidate;
     }
 }
