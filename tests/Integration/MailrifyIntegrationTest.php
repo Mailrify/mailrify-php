@@ -84,6 +84,7 @@ final class MailrifyIntegrationTest extends TestCase
             return $candidate;
         }
 
+        $matches = [];
         if (preg_match('/^(?:"?([^"<]*)"?\s*)?<([^>]+)>$/', $candidate, $matches) === 1) {
             $name = trim($matches[1] ?? '');
             $email = trim($matches[2] ?? '');
