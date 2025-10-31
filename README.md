@@ -1,5 +1,8 @@
 # Mailrify PHP SDK
 
+[![CI](https://github.com/mailrify/mailrify-php/actions/workflows/ci.yml/badge.svg)](https://github.com/mailrify/mailrify-php/actions/workflows/ci.yml)
+[![Release](https://github.com/mailrify/mailrify-php/actions/workflows/release.yml/badge.svg)](https://github.com/mailrify/mailrify-php/actions/workflows/release.yml)
+
 The official PHP SDK for [Mailrify](https://mailrify.com), a transactional and marketing email platform. This library provides a type-safe, developer-friendly wrapper around the Mailrify REST API, generated from the upstream [mailrify-openapi](https://github.com/Mailrify/mailrify-openapi) specification.
 
 ## Requirements
