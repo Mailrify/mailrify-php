@@ -22,22 +22,23 @@ composer require mailrify/mailrify-php
 ```php
 <?php
 
-declare(strict_types=1);
+require __DIR__ . '/vendor/autoload.php';
 
 use Mailrify\Sdk\Client;
 
 $client = Client::create([
-    'apiKey' => getenv('MAILRIFY_API_KEY') ?: '',
+    'apiKey'  => 'YOUR_API_KEY',
 ]);
 
-$email = $client->emails()->send([
-    'from' => 'you@example.com',
-    'to' => 'customer@example.com',
-    'subject' => 'Hello from Mailrify',
-    'text' => 'Welcome aboard!',
+$response = $client->emails()->send([
+    'from'    => 'Your app <no-reply@yourdomain.com>',
+    'to'      => 'client@example.com',
+    'subject' => 'Welcome to Mailrify 🚀',
+    'html'    => '<p>It works! 👋</p>',
+    'text'    => 'It works!'
 ]);
 
-echo $email->emailId;
+echo $response->emailId;
 ```
 
 ## Configuration
