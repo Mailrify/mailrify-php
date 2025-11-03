@@ -44,3 +44,15 @@ jobs:
             -H "Accept: application/json" \
             -d "{\"repository\": {\"url\": \"${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}\"}}" \
             "https://packagist.org/api/update-package?username=${GITHUB_REPOSITORY_OWNER}&apiToken=${TOKEN}"
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          body: |
+            Automated release for ${{ github.ref }}.
+          draft: false
+          prerelease: false
